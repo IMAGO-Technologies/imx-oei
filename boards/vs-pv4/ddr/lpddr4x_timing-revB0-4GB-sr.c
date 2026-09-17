@@ -6,7 +6,7 @@
  * Code generated with DDR Tool v4.0.0_1.2-1eade933a.
  * DDR PHY FW2024.09-SP2
  * Chip revision: B0
- * Part number: MT53E512M32D1-046
+ * Part number: IS43/46LQ32K01B
  */
 
 #include "ddr.h"
@@ -14,15 +14,15 @@
 /* Initialize DDRC registers */
 static struct ddrc_cfg_param ddr_ddrc_cfg[] = {
     {0x5e080110, 0x44110001U},
-    {0x5e080000, 0x7fU},
+    {0x5e080000, 0xffU},
     {0x5e080008, 0x0U},
-    {0x5e080010, 0x0U},
+    {0x5e080010, 0x1U},
     {0x5e080014, 0x80000U},
     {0x5e080020, 0x80000000U},
-    {0x5e080024, 0x8000fffU},
+    {0x5e080024, 0x80007ffU},
     {0x5e080028, 0x80000000U},
     {0x5e08002c, 0x7ffU},
-    {0x5e080080, 0x80800412U},
+    {0x5e080080, 0x80800512U},
     {0x5e080084, 0x0U},
     {0x5e080114, 0x1000U},
     {0x5e080260, 0x80080U},
@@ -53,20 +53,20 @@ static struct ddrc_cfg_param ddr_ddrc_cfg[] = {
 
 /* DRAM fsp configurations */
 static struct ddrc_cfg_param ddr_dram_fsp0_ddrc_cfg[] = {
-    {0x5e080100, 0x25A24211U},
+    {0x5e080100, 0x25AF4211U},
     {0x5e080104, 0xF8FF001CU},
-    {0x5e080108, 0x444688F4U},
+    {0x5e080108, 0x444608F4U},
     {0x5e08010C, 0x001601FCU},
     {0x5e080124, 0x1E800000U},
     {0x5e080160, 0x00009102U},
     {0x5e08016C, 0x35F00000U},
     {0x5e080170, 0x8B0B0608U},
     {0x5e080250, 0x0000002AU},
-    {0x5e080254, 0x011000ACU},
+    {0x5e080254, 0x017400ACU},
     {0x5e080258, 0x00000008U},
     {0x5e08025C, 0x00000400U},
     {0x5e080300, 0x24542413U},
-    {0x5e080304, 0x0110280FU},
+    {0x5e080304, 0x0174280FU},
     {0x5e080308, 0x0A400F03U},
 };
 
@@ -6149,7 +6149,7 @@ static struct dram_fsp_cfg ddr_dram_fsp_cfg[] = {
 };
 
 /* ddr timing config params */
-struct dram_timing_info dram_timing_2gb = {
+struct dram_timing_info dram_timing_4gb_sr = {
     .ddrc_cfg = ddr_ddrc_cfg,
     .ddrc_cfg_num = ARRAY_SIZE(ddr_ddrc_cfg),
     .ddrphy_cfg = ddr_ddrphy_cfg,

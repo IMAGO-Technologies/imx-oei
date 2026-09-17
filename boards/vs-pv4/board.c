@@ -92,9 +92,12 @@ void BOARD_InitDebugConsole(void)
 
 struct dram_timing_info dram_timing;
 
+extern struct dram_timing_info dram_timing_8gb;
+#if defined(SREV_B0)
 extern struct dram_timing_info dram_timing_2gb;
 extern struct dram_timing_info dram_timing_4gb;
-extern struct dram_timing_info dram_timing_8gb;
+extern struct dram_timing_info dram_timing_4gb_sr;	// single-rank
+#endif
 
 static void MemCopy(void *dst, const void *src, unsigned int len)
 {
@@ -125,16 +128,36 @@ void BOARD_InitHardware(void)
 #endif
 
 #ifdef OEI_DDR
+#if defined(SREV_A0)
+	MemCopy(&dram_timing, &dram_timing_8gb, sizeof(struct dram_timing_info));
+#elif defined(SREV_B0)
 	unsigned int gpio1_in = *(unsigned int *)(0x47400000 + 0x50);
 	unsigned int ram_mode = ((gpio1_in >> 12) & 0x1) + ((gpio1_in >> (14-1)) & 0x2);
 
 	printf("RAM_MODE: %u\n", ram_mode);
 
-	if (ram_mode == 0x3)
-		MemCopy(&dram_timing, &dram_timing_8gb, sizeof(struct dram_timing_info));
-	else if (ram_mode == 0x2)
-		MemCopy(&dram_timing, &dram_timing_4gb, sizeof(struct dram_timing_info));
-	else
+	if (ram_mode == 0x2)
+	{
 		MemCopy(&dram_timing, &dram_timing_2gb, sizeof(struct dram_timing_info));
+	}
+	else if (ram_mode == 0x0)
+	{
+		MemCopy(&dram_timing, &dram_timing_4gb_sr, sizeof(struct dram_timing_info));
+	}
+	else
+	{
+		MemCopy(&dram_timing, &dram_timing_8gb, sizeof(struct dram_timing_info));
+		if (ram_mode == 0x1)
+		{
+			// in case of 4GB, we only apply differences to 8GB setting to save space
+			dram_timing.ddrc_cfg = dram_timing_4gb.ddrc_cfg;
+			dram_timing.ddrc_cfg_num = dram_timing_4gb.ddrc_cfg_num;
+			dram_timing.fsp_cfg = dram_timing_4gb.fsp_cfg;
+			dram_timing.fsp_cfg_num = dram_timing_4gb.fsp_cfg_num;
+		}
+	}
+#else
+	#error SREV_A0 / SREV_B0 is not defined
+#endif
 #endif
 }
